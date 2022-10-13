@@ -10,11 +10,11 @@ class UsersController < ApplicationController
       end
 
     def show
-        user = User.find_by(username: params[:username])  
-        if user&.authenticate(params[:password])
-            render json: user, status: :created
+        user = User.find_by(id: session[:user_id])
+        if user
+        render json: user, status: :ok
         else
-            render json: {error: {login: "Invalid username or password"}, status: :unauthorized}
+        render json: { error: "Not authorized" }, status: :unauthorized
         end
     end
     
@@ -24,3 +24,5 @@ class UsersController < ApplicationController
     params.permit(:username, :password, :password_confirmation)
   end
 end
+
+# find_by = if they have already created account, and then logging in with the login params
